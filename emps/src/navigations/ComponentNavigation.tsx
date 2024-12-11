@@ -1,6 +1,6 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, StackScreenProps} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DashBoard from '../screens/dashBoard/DashBoard';
@@ -9,22 +9,27 @@ import DrawerContant from '../components/drawerContant/DrawerContant';
 import EmployeeDetails from '../screens/employeeDetails/EmployeeDetails';
 import EditEmployee from '../screens/editEmployee/EditEmployee';
 
+// Define stack parameters
+type RootStackParamList = {
+  MainDrawer: undefined;
+  AddEmployee: undefined;
+  EmployeeDetails: { employeeId: string };
+  EditEmployee: { employeeId: string };
+};
+
 interface MainProps {
   logout: () => void;
 }
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const DrawerNavigation: React.FC<MainProps> = ({logout}) => {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContant {...props} logout={logout} />}
     >
-      <Drawer.Screen
-        name="Dashboard"
-        component={DashBoard}
-      />
+      <Drawer.Screen name="Dashboard" component={DashBoard} />
     </Drawer.Navigator>
   );
 };
@@ -46,12 +51,16 @@ const AppNavigator: React.FC<MainProps> = ({logout}) => {
           />
           <Stack.Screen
             name="EmployeeDetails"
-            component={EmployeeDetails}
+            children={({ route }: StackScreenProps<RootStackParamList, 'EmployeeDetails'>) => (
+              <EmployeeDetails route={route} />
+            )}
             options={{title: 'Employee Details'}}
           />
           <Stack.Screen
             name="EditEmployee"
-            component={EditEmployee}
+            children={({ route }: StackScreenProps<RootStackParamList, 'EditEmployee'>) => (
+              <EditEmployee route={route} />
+            )}
             options={{title: 'Edit Employee'}}
           />
         </Stack.Navigator>

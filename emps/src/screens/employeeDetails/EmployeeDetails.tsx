@@ -51,6 +51,12 @@ const EmployeeDetails = ({
       }
     };
     fetchEmployeeDetails();
+    const interval = setInterval(() => {
+      fetchEmployeeDetails();
+    }, 5000); // 10000ms = 10 seconds
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(interval);
   }, [employeeId]);
 
   if (loading) {
@@ -150,11 +156,12 @@ export default EmployeeDetails;
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    padding: 20,
+    padding: 15,
+    backgroundColor: '#f9f9f9',
+
   },
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
   },
   loaderContainer: {
     flex: 1,

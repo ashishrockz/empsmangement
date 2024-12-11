@@ -23,6 +23,10 @@ const List = () => {
       }
     };
     fetchEmployeeData();
+    const interval = setInterval(() => {
+      fetchEmployeeData();
+    }, 5000); // 10000ms = 10 seconds
+    return () => clearInterval(interval);
   }, []);
 
   // Render a single employee row
