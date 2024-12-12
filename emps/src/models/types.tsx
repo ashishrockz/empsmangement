@@ -5,14 +5,18 @@ export type RootStackParamList = {
   List: undefined; // No parameters for the List screen
   MainDrawer: undefined;
   AddEmployee: undefined;
+  Profile:undefined;
   EmployeeDetails: { employeeId: string };
-  EditEmployee: { employeeId: string }
+  EditEmployee: { employeeId: string };
+  EditProfile: { employeeId: string }
+
 };
 
 
 export type EmployeeDetailsNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'EmployeeDetails'
+  'EmployeeDetails',
+  'Profile'
 >;
 
 export type ListNavigationProp = NativeStackNavigationProp<RootStackParamList, 'List'>;

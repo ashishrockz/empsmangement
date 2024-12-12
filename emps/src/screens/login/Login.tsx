@@ -24,7 +24,7 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        'https://backend-api-social.vercel.app/api/emp/login',
+        'https://backend-api-social.vercel.app/auth/login',
         {
           companyMail,
           password,

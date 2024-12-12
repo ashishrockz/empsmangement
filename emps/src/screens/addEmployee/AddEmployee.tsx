@@ -39,18 +39,73 @@ const AddEmployee = () => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isAdmin, setIsAdmin] = useState('');
-  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Error messages for each field
+  const [errors, setErrors] = useState({
+    employeeId: '',
+    firstName: '',
+    lastName: '',
+    companyMail: '',
+    phone: '',
+    department: '',
+    password: '',
+    isAdmin: '',
+  });
 
   useEffect(() => {
+    const newErrors = { ...errors };
+
+    // Reset error messages
+    newErrors.employeeId = '';
+    newErrors.firstName = '';
+    newErrors.lastName = '';
+    newErrors.companyMail = '';
+    newErrors.phone = '';
+    newErrors.department = '';
+    newErrors.password = '';
+    newErrors.isAdmin = '';
+
+    // Validation checks and setting error messages
+    if (!employeeId.trim()) {
+      newErrors.employeeId = 'Employee ID is required.';
+    }
+    if (!firstName.trim()) {
+      newErrors.firstName = 'First Name is required.';
+    }
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Last Name is required.';
+    }
+    if (!/^\S+@\S+\.\S+$/.test(companyMail)) {
+      newErrors.companyMail = 'Please enter a valid email.';
+    }
+    if (!/^\d{10}$/.test(phone)) {
+      newErrors.phone = 'Phone number must be exactly 10 digits.';
+    }
+    if (!department.trim()) {
+      newErrors.department = 'Department is required.';
+    }
+    if (!password.trim()) {
+      newErrors.password = 'Password is required.';
+    }
+    if (!isAdmin.trim()) {
+      newErrors.isAdmin = 'Admin status is required.';
+    }
+
+    setErrors(newErrors);
+
+    // Check if the form is valid
     const isValid =
+      !Object.values(newErrors).some((error) => error) && // Check if there is any error
       employeeId.trim() &&
       firstName.trim() &&
       lastName.trim() &&
       /^\S+@\S+\.\S+$/.test(companyMail) &&
       /^\d{10}$/.test(phone) &&
-      department &&
-      password &&
-      isAdmin;
+      department.trim() &&
+      password.trim() &&
+      isAdmin.trim();
+
     setIsFormValid(isValid);
   }, [employeeId, firstName, lastName, companyMail, phone, department, password, isAdmin]);
 
@@ -104,6 +159,7 @@ const AddEmployee = () => {
               value={employeeId}
               onChangeText={setEmployeeId}
             />
+            {errors.employeeId ? <Text style={styles.errorText}>{errors.employeeId}</Text> : null}
           </View>
           <View style={[styles.inputGroup, styles.nameContainer]}>
             <View style={styles.halfWidthInputGroup}>
@@ -115,6 +171,7 @@ const AddEmployee = () => {
                 value={firstName}
                 onChangeText={setFirstName}
               />
+              {errors.firstName ? <Text style={styles.errorText}>{errors.firstName}</Text> : null}
             </View>
             <View style={styles.halfWidthInputGroup}>
               <Text style={styles.label}>Last Name:</Text>
@@ -125,6 +182,7 @@ const AddEmployee = () => {
                 value={lastName}
                 onChangeText={setLastName}
               />
+              {errors.lastName ? <Text style={styles.errorText}>{errors.lastName}</Text> : null}
             </View>
           </View>
           <View style={styles.inputGroup}>
@@ -136,6 +194,7 @@ const AddEmployee = () => {
               value={companyMail}
               onChangeText={setCompanyMail}
             />
+            {errors.companyMail ? <Text style={styles.errorText}>{errors.companyMail}</Text> : null}
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Phone Number:</Text>
@@ -147,6 +206,7 @@ const AddEmployee = () => {
               onChangeText={setPhone}
               keyboardType="numeric"
             />
+            {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Department:</Text>
@@ -162,6 +222,7 @@ const AddEmployee = () => {
               selectedTextStyle={styles.selectedTextStyle}
               placeholderStyle={styles.placeholderStyle}
             />
+            {errors.department ? <Text style={styles.errorText}>{errors.department}</Text> : null}
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Password:</Text>
@@ -173,10 +234,8 @@ const AddEmployee = () => {
                 value={password}
                 onChangeText={setPassword}
                 placeholderTextColor="gray"
-
               />
-              <TouchableOpacity
-                onPress={() => setPasswordVisible(!passwordVisible)}>
+              <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
                 <Image
                   style={{ width: 25, height: 25 }}
                   source={
@@ -187,6 +246,7 @@ const AddEmployee = () => {
                 />
               </TouchableOpacity>
             </View>
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Admin:</Text>
@@ -202,12 +262,10 @@ const AddEmployee = () => {
               selectedTextStyle={styles.selectedTextStyle}
               placeholderStyle={styles.placeholderStyle}
             />
+            {errors.isAdmin ? <Text style={styles.errorText}>{errors.isAdmin}</Text> : null}
           </View>
           <TouchableOpacity
-            style={[
-              styles.submitButton,
-              { backgroundColor: isFormValid ? '#4070f4' : '#cccccc' },
-            ]}
+            style={[styles.submitButton, { backgroundColor: isFormValid ? '#4070f4' : '#cccccc' }]}
             onPress={handleSubmit}
             disabled={!isFormValid}
           >
@@ -270,18 +328,24 @@ const styles = StyleSheet.create({
   },
   passwordContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   submitButton: {
-    backgroundColor: '#4070f4',
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 15,
     borderRadius: 10,
   },
   submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'white',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 
