@@ -102,8 +102,6 @@ const EditProfile = ({route}: {route: EditProfileRouteProp}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.header}>Edit Employee Details</Text>
-
         <View style={styles.formGroup}>
           <Text style={styles.label}>First Name:</Text>
           <TextInput
@@ -160,16 +158,43 @@ const EditProfile = ({route}: {route: EditProfileRouteProp}) => {
         </View>
         <View style={styles.formGroup}>
           <Text style={styles.label}>Company Mail</Text>
-          <Text style={styles.staticText}>{formData.companyMail}</Text>
+          <Text
+            style={styles.staticText}
+            onPress={() =>
+              Alert.alert(
+                'Access Restricted',
+                'Only an admin can change the department. Please contact your Manager or System Admin.',
+              )
+            }>
+            {formData.companyMail}
+          </Text>
         </View>
         <View style={styles.formGroup}>
           <Text style={styles.label}>Department:</Text>
-          <Text style={styles.staticText}>{formData.department}</Text>
+          <Text
+            style={styles.staticText}
+            onPress={() =>
+              Alert.alert(
+                'Access Restricted',
+                'Only an admin can change the department. Please contact your Manager or System Admin.',
+              )
+            }>
+            {formData.department}
+          </Text>
         </View>
 
         <View style={styles.formGroup}>
           <Text style={styles.label}>Status:</Text>
-          <Text style={styles.staticText}>{formData.status}</Text>
+          <Text
+            style={styles.staticText}
+            onPress={() =>
+              Alert.alert(
+                'Access Restricted',
+                'Only an admin can change the department. Please contact your Manager or System Admin.',
+              )
+            }>
+            {formData.status}
+          </Text>
         </View>
         <Button title="Save Changes" onPress={handleSubmit} />
       </ScrollView>

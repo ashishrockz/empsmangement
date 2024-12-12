@@ -6,6 +6,7 @@ export type RootStackParamList = {
   MainDrawer: undefined;
   AddEmployee: undefined;
   Profile:undefined;
+  ApplyLeave:undefined;
   EmployeeDetails: { employeeId: string };
   EditEmployee: { employeeId: string };
   EditProfile: { employeeId: string }
@@ -17,6 +18,6 @@ export type EmployeeDetailsNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'EmployeeDetails',
   'Profile'
->;
+  >;
 
 export type ListNavigationProp = NativeStackNavigationProp<RootStackParamList, 'List'>;

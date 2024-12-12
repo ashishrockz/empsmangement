@@ -97,7 +97,6 @@ const EditEmployee = ({ route }: { route: EditEmployeeRouteProp }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Edit Employee Details</Text>
 
       <View style={styles.formGroup}>
         <Text style={styles.label}>First Name:</Text>

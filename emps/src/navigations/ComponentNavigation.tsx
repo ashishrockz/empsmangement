@@ -10,15 +10,17 @@ import EmployeeDetails from '../screens/employeeDetails/EmployeeDetails';
 import EditEmployee from '../screens/editEmployee/EditEmployee';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import EditProfile from '../screens/editProfile/EditProfile';
+import AddLeave from '../screens/addLeave/AddLeave';
 
 // Define stack parameters
 type RootStackParamList = {
   MainDrawer: undefined;
   AddEmployee: undefined;
-  Profile:undefined;
+  Profile: undefined;
   EmployeeDetails: {employeeId: string};
   EditEmployee: {employeeId: string};
-  EditProfile:{employeeId: string};
+  EditProfile: {employeeId: string};
+  ApplyLeave:undefined;
 };
 
 interface MainProps {
@@ -31,7 +33,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const DrawerNavigation: React.FC<MainProps> = ({logout}) => {
   return (
     <Drawer.Navigator
-      drawerContent={props => <DrawerContant {...props} logout={logout} /> }>
+      drawerContent={props => <DrawerContant {...props} logout={logout} />}>
       <Drawer.Screen
         name="Admin Dashboard"
         component={DashBoard}
@@ -76,7 +78,7 @@ const AppNavigator: React.FC<MainProps> = ({logout}) => {
             )}
             options={{title: 'Edit Employee'}}
           />
-          <Stack.Screen name="Profile" component={ProfileScreen}/>
+          <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen
             name="EditProfile"
             children={({
@@ -86,6 +88,7 @@ const AppNavigator: React.FC<MainProps> = ({logout}) => {
             )}
             options={{title: 'EditProfile'}}
           />
+          <Stack.Screen name="ApplyLeave" component={AddLeave} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
