@@ -31,13 +31,18 @@ const Login = () => {
         },
       );
       console.log('Signin successful:', response.data);
-      login(response.data.token);
-    } 
-    catch (error) {
-      // console.error('Login failed:', error);
+  
+      // Assuming response.data.token contains the authentication token
+      const { token } = response.data;
+      const expirationTime = new Date().getTime() + 3600000; // 1 hour from now
+  
+      login(token, expirationTime); // Pass the token and expiration time to the login function
+    } catch (error) {
+      console.error('Login failed:', error);
       Alert.alert('Error', 'Invalid email or password. Please try again.');
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>

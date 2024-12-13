@@ -2,6 +2,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 // Define the parameter types for your navigation
 export type RootStackParamList = {
+  Login:undefined;
   List: undefined; // No parameters for the List screen
   MainDrawer: undefined;
   AddEmployee: undefined;

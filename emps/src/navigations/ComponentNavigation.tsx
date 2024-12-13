@@ -83,7 +83,7 @@ const AppNavigator: React.FC<MainProps> = ({logout}) => {
             name="EditProfile"
             children={({
               route,
-            }: StackScreenProps<RootStackParamList, 'EditProfile'>) => (
+            }:  StackScreenProps<RootStackParamList, 'EditProfile'>) => (
               <EditProfile route={route} />
             )}
             options={{title: 'EditProfile'}}

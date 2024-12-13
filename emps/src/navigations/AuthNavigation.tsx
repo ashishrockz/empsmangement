@@ -1,12 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import Login from '../screens/login/Login'
-import AddEmployee from '../screens/addEmployee/AddEmployee'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from '../screens/login/Login';
+import { RootStackParamList } from '../models/types';
+
+const Stack = createStackNavigator<RootStackParamList>();
+
 const AuthNavigation = () => {
   return (
-    <View>
-      <Login/>
-    </View>
-  )
-}
-export default AuthNavigation
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default AuthNavigation;

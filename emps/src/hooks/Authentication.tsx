@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
-  login: (token: string) => void;
+  tokenExpirationTime: number | null;
+  login: (token: string, expirationTime: number) => void;
   logout: () => void;
 }
 
@@ -17,42 +18,56 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [tokenExpirationTime, setTokenExpirationTime] = useState<number | null>(null);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('token');
-        if (storedToken) {
-          setIsAuthenticated(true);
-          setToken(storedToken);
+        const storedExpirationTime = await AsyncStorage.getItem('tokenExpirationTime');
+
+        if (storedToken && storedExpirationTime) {
+          const parsedExpirationTime = parseInt(storedExpirationTime);
+          const currentTime = new Date().getTime();
+
+          if (currentTime < parsedExpirationTime) {
+            setIsAuthenticated(true);
+            setToken(storedToken);
+            setTokenExpirationTime(parsedExpirationTime);
+          } else {
+            // Token is expired, logout
+            logout();
+          }
         }
       } catch (error) {
-        console.log('Error retrieving token:', error);
+        console.log('Error retrieving token or expiration time:', error);
       }
     };
+
     checkAuthStatus();
   }, []);
 
-  const login = (newToken: string) => {
+  const login = (newToken: string, expirationTime: number) => {
     AsyncStorage.setItem('token', newToken);
+    AsyncStorage.setItem('tokenExpirationTime', expirationTime.toString());
     setToken(newToken);
+    setTokenExpirationTime(expirationTime);
     setIsAuthenticated(true);
   };
 
-  // Inside your useAuth hook
-const logout = async (): Promise<void> => {
+  const logout = async (): Promise<void> => {
     try {
       await AsyncStorage.clear();
-      console.log('logout successfully');
       setIsAuthenticated(false);
+      setToken(null);
+      setTokenExpirationTime(null);
     } catch (error) {
       console.log('Error removing token:', error);
     }
   };
 
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, tokenExpirationTime, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
