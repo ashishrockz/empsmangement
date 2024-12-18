@@ -31,11 +31,13 @@ const LeaveRequestAproval = ({ route }: { route: any; }) => {
         status,
       });
       Alert.alert('Success', `Leave ${status.toLowerCase()} successfully`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error approving/rejecting leave request:', error);
-      Alert.alert('Error', 'Failed to update leave status');
+      const errorMessage = error.response?.data?.message || 'Failed to update leave status';
+      Alert.alert('Error', errorMessage);
     }
   };
+  
 
   // Fetch leave request details when the component mounts
   useEffect(() => {

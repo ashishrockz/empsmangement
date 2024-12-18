@@ -12,7 +12,7 @@ import {useNavigation, NavigationProp} from '@react-navigation/native';
 
 // Define the types for your navigation routes
 type RootStackParamList = {
-    LeaveRequestApproval: {leaveId: string};
+  LeaveRequestApproval: {leaveId: string};
 };
 
 const LeaveRequests = () => {
@@ -48,6 +48,18 @@ const LeaveRequests = () => {
     return newDate.toLocaleDateString();
   };
 
+  // Render status for each approver
+  const renderApprovalStatus = (status: string) => {
+    let color = '#FFA500'; // Default color for pending
+    if (status === 'Approved') color = '#4CAF50'; // Green for approved
+    if (status === 'Rejected') color = '#FF0000'; // Red for rejected
+    return (
+      <View style={[styles.statusBox, {backgroundColor: color}]}>
+        <Text style={styles.statusText}>{status}</Text>
+      </View>
+    );
+  };
+
   const renderItem = ({item}: {item: any}) => {
     return (
       <View style={styles.card}>
@@ -61,7 +73,22 @@ const LeaveRequests = () => {
         </Text>
 
         <Text style={styles.reason}>Reason: {item.reason}</Text>
-        <Text style={styles.status}>Status: {item.status}</Text>
+        <Text style={styles.status}>Overall Status: {item.status}</Text>
+
+        <View style={styles.statusBar}>
+          <View style={styles.statusItem}>
+            <Text style={styles.approverTitle}>Team Lead</Text>
+            {renderApprovalStatus(item.approver?.teamLead?.status || 'Pending')}
+          </View>
+          <View style={styles.statusItem}>
+            <Text style={styles.approverTitle}>Manager</Text>
+            {renderApprovalStatus(item.approver?.manager?.status || 'Pending')}
+          </View>
+          <View style={styles.statusItem}>
+            <Text style={styles.approverTitle}>Approver</Text>
+            {renderApprovalStatus(item.approver?.status || 'Pending')}
+          </View>
+        </View>
 
         <TouchableOpacity
           style={styles.editButton}
@@ -103,8 +130,8 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     borderRadius: 8,
-    elevation: 2, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -130,6 +157,34 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 14,
     color: 'green',
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  statusBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  statusItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  approverTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  statusBox: {
+    width: 60,
+    height: 20,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusText: {
+    color: '#fff',
+    fontSize: 10,
     fontWeight: 'bold',
   },
   editButton: {

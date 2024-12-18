@@ -29,7 +29,7 @@ type AddLeaveProp = RouteProp<RootStackParamList, 'ApplyLeave'>;
 
 const AddLeave = ({route}: {route: AddLeaveProp}) => {
   const {employeeId} = route.params;
-  const [leaveType, setLeaveType] = useState('');
+  const [leaveType, setLeaveType] = useState('Sick Leave'); // Set a default
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
@@ -63,32 +63,30 @@ const AddLeave = ({route}: {route: AddLeaveProp}) => {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-  
+
+    const payload = {
+      employeeId,
+      leaveType,
+      startDate,
+      endDate,
+      reason,
+    };
+    console.log('Payload before API call:', payload); // Log payload
+
     try {
-      const payload = {
-        employeeId,
-        leaveType,
-        startDate,
-        endDate,
-        reason,
-      };
-      console.log('Payload:', payload);
-  
       const response = await axios.post(
         'https://backend-api-social.vercel.app/api/leave/apply',
         payload,
       );
       console.log('API Response:', response.data);
-  
       Alert.alert('Success', 'Leave request submitted successfully!', [
-        { text: 'OK', onPress: () => navigation.goBack() }, // Ensure navigation happens on success
+        {text: 'OK', onPress: () => navigation.goBack()},
       ]);
     } catch (error) {
       console.error('Error submitting leave request:', error);
       Alert.alert('Error', 'Failed to submit leave request.');
     }
   };
-  
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -101,13 +99,13 @@ const AddLeave = ({route}: {route: AddLeaveProp}) => {
             labelField="label"
             valueField="value"
             placeholder="Select leave type"
-            value={leaveType} // Ensure this is the value that is being updated
+            value={leaveType}
             style={styles.dropdown}
             selectedTextStyle={styles.selectedTextStyle}
             placeholderStyle={styles.placeholderStyle}
             onChange={item => {
               console.log('Selected item:', item); // Log the selected item
-              setLeaveType(item.value); // Update leaveType
+              setLeaveType(item.value); // Correctly set leaveType
             }}
           />
         </View>
